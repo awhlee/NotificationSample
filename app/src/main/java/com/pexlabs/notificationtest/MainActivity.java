@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton3;
     private Button mButton4;
     private Button mButton5;
+    private Button mButton6;
 
     private NotificationManagerCompat mNotificationManager;
 
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mButton5 = (Button)findViewById(R.id.button5);
         mButton5.setOnClickListener(this);
+
+        mButton6 = (Button)findViewById(R.id.button6);
+        mButton6.setOnClickListener(this);
 
         mNotificationManager = NotificationManagerCompat.from(this);
     }
@@ -121,8 +125,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button4:
                 handleButton4();
+                break;
             case R.id.button5:
                 handleButton5();
+                break;
+            case R.id.button6:
+                handleButton6();
                 break;
         }
     }
@@ -305,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNotificationManager.notify(SUMMARY_NOTIFICATION_ID, summaryNotification);
     }
 
-
     private void handleButton5() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setAction("custom notif action");
@@ -335,4 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNotificationManager.notify(BUTTON5_NOTIF_ID, n);
     }
 
+    private void handleButton6() {
+        mNotificationManager.cancel(BUTTON5_NOTIF_ID);
+    }
 }
