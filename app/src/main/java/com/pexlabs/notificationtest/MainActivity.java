@@ -11,13 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.RemoteViews;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button mButton1;
     private Button mButton2;
     private Button mButton3;
     private Button mButton4;
+    private Button mButton5;
 
     private NotificationManagerCompat mNotificationManager;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int BUTTON1_NOTIF_ID = 1;
     private static final int BUTTON2_NOTIF_ID = 2;
     private static int mCurrentNotifId = 3;
+    private static final int BUTTON5_NOTIF_ID = 1001;
 
     private static final String INTENT_DATA_KEY = "data";
 
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mButton4 = (Button)findViewById(R.id.button4);
         mButton4.setOnClickListener(this);
+
+        mButton5 = (Button)findViewById(R.id.button5);
+        mButton5.setOnClickListener(this);
 
         mNotificationManager = NotificationManagerCompat.from(this);
     }
@@ -116,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button4:
                 handleButton4();
+            case R.id.button5:
+                handleButton5();
                 break;
         }
     }
@@ -296,6 +303,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         mNotificationManager.notify(SUMMARY_NOTIFICATION_ID, summaryNotification);
+    }
+
+
+    private void handleButton5() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction("custom notif action");
+        intent.putExtra(INTENT_DATA_KEY, "custom notif action");
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int)System.currentTimeMillis(),
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_notification);
+        contentView.setImageViewResource(R.id.custom_image, R.drawable.ic_pex);
+        contentView.setTextViewText(R.id.custom_title, "Custom notification");
+        contentView.setTextViewText(R.id.custom_text, "This is a custom layout");
+        contentView.setTextColor(R.id.custom_title, 0xFFFF0000);
+        contentView.setTextColor(R.id.custom_text, 0xFFFF0000);
+
+        Notification n = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_pex)
+//                    .setContent(contentView)
+                    .setContentTitle("Custom Content Title")
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true)
+                    .setGroup(GROUP_KEY)
+                    .build();
+
+        n.bigContentView = contentView;
+
+        mNotificationManager.notify(BUTTON5_NOTIF_ID, n);
     }
 
 }
