@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("TestApp", "onResume");
+        Log.i("TestApp", "onCreate");
 
         super.onCreate(savedInstanceState);
 
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
         mNotificationManager.notify(mCurrentNotifId++, n);
-        updateSummaryNotification();
+//        updateSummaryNotification();
     }
 
     /**
@@ -295,6 +295,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PendingIntent pIntent = PendingIntent.getActivity(this, (int)System.currentTimeMillis(),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
+        // Let's test the delete intent
+        Intent deleteIntent = new Intent(this, MainActivity.class);
+        deleteIntent.setAction("Delete It!");
+        deleteIntent.putExtra(INTENT_DATA_KEY, "Delete It Man!!!");
+
+        PendingIntent deletePending = PendingIntent.getActivity(this,
+                (int)System.currentTimeMillis(), deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         Notification summaryNotification = new NotificationCompat.Builder(this)
                 .setContentTitle("Summary Notification!")
                 .setSmallIcon(R.drawable.ic_pex)
@@ -306,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setGroup(GROUP_KEY)
                 .setGroupSummary(true)
                 .setNumber(100)
+                .setDeleteIntent(deletePending)
                 .addAction(R.drawable.ic_pex, "Go to Inbox", pIntent)
                 .build();
 
