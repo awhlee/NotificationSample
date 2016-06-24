@@ -3,6 +3,8 @@ package com.pexlabs.notificationtest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -194,19 +196,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PendingIntent pIntent3 = PendingIntent.getActivity(this, (int)System.currentTimeMillis(),
                 intent3, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_pex);
+
         Notification n = new NotificationCompat.Builder(this)
                 .setContentTitle("Button 2 Title")
                 .setContentText("Button 2 Text")
+                .setSubText("subtext")
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(largeIcon)
+//                .setColor(0xFF4A90E2)
                 .setAutoCancel(true)
                 .setGroup(GROUP_KEY)
                 .addAction(R.drawable.ic_pex, "Action 1", pIntent)
                 .addAction(R.drawable.ic_pex, "Action 2", pIntent2)
                 .addAction(R.drawable.ic_pex, "Action 3", pIntent3)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("test"))
                 .build();
 
         mNotificationManager.notify(BUTTON1_NOTIF_ID, n);
-        updateSummaryNotification();
+//        updateSummaryNotification();
     }
 
     private void handleButton3() {
@@ -243,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
         mNotificationManager.notify(BUTTON2_NOTIF_ID, n);
-        updateSummaryNotification();
+//        updateSummaryNotification();
     }
 
     private void handleButton4() {
@@ -280,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
         mNotificationManager.notify(mCurrentNotifId++, n);
-//        updateSummaryNotification();
+        updateSummaryNotification();
     }
 
     /**
@@ -320,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addAction(R.drawable.ic_pex, "Go to Inbox", pIntent)
                 .build();
 
-
         mNotificationManager.notify(SUMMARY_NOTIFICATION_ID, summaryNotification);
     }
 
@@ -341,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Notification n = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_pex)
+// Only use this for small custom layouts
 //                    .setContent(contentView)
                     .setContentTitle("Custom Content Title")
                     .setContentIntent(pIntent)
@@ -348,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setGroup(GROUP_KEY)
                     .build();
 
+        // Use this for big custom layouts
         n.bigContentView = contentView;
 
         mNotificationManager.notify(BUTTON5_NOTIF_ID, n);
